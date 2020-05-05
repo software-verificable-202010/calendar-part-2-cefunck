@@ -1,6 +1,6 @@
-# calendar-part-1-cefunck
+# calendar-part-2-cefunck
 
-This is the repository corresponding to the first part of the project of the course "Calidad y verificación de software".
+This is the repository corresponding to the second part of the project of the course "Calidad y verificación de software".
 
 ### Current Features
 
