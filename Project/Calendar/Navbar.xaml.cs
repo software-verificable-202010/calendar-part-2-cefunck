@@ -22,6 +22,7 @@ namespace Calendar
     {
         private const string NavBarMonthFormat = "MMMM yyyy";
         private const string DayNumberResourceKeyPrefix = "dayResource";
+        private const string DisplayedDateResourceName = "displayedDate";
         private const string DayNumberResourceBlankValue = "";
         private const int IterationIndexOffset = 1;
         private const int GridRowIndexOffset = 1;
@@ -115,12 +116,12 @@ namespace Calendar
 
         private DateTime GetDisplayedDateResourceValue()
         {
-            return (DateTime)App.Current.Resources["displayedDate"];
+            return (DateTime)App.Current.Resources[DisplayedDateResourceName];
         }
 
         private void SetDisplayedDateResourceValue(DateTime dateToDisplay)
         {
-            App.Current.Resources["displayedDate"] = dateToDisplay;
+            App.Current.Resources[DisplayedDateResourceName] = dateToDisplay;
         }
 
     }

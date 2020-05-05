@@ -23,6 +23,7 @@ namespace Calendar
         private Brush highlightColor = Brushes.Red;        
         private const string DayElementNamePrefix = "dayElement";
         private const string DayNumberResourceKeyPrefix = "dayResource";
+        private const string DisplayedDateResourceName = "displayedDate";
         private const string DayNumberResourceBlankValue = "";
         private const int DaysInWeek = 7;
         private const int IterationIndexOffset = 1;
@@ -124,7 +125,7 @@ namespace Calendar
 
         private DateTime GetDisplayedDateResourceValue()
         {
-            return (DateTime)App.Current.Resources["displayedDate"];
+            return (DateTime)App.Current.Resources[DisplayedDateResourceName];
         }
 
         private Point GetGridCoordinatesByIterationIndex(int iterationIndex)
