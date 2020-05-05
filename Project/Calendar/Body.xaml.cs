@@ -117,9 +117,15 @@ namespace Calendar
 
         private int GetfirstDayGridColumnIndex()
         {
+            const int SundayDayOfWeek = 7;
+            const int SystemEnumSundayDayOfWeek = 0;
             DateTime displayedDate = GetDisplayedDateResourceValue();
             DateTime firstDayOfDisplayedMonth = new DateTime(displayedDate.Year, displayedDate.Month, FirstDayNumberInMonth);
             int firstDayGridColumnIndex = (int)(firstDayOfDisplayedMonth.DayOfWeek) - GridColumnIndexOffset;
+            if ((int)(firstDayOfDisplayedMonth.DayOfWeek) == SystemEnumSundayDayOfWeek)
+            {
+                firstDayGridColumnIndex = SundayDayOfWeek - GridColumnIndexOffset;
+            }
             return firstDayGridColumnIndex;
         }
 
