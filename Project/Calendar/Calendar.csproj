@@ -55,10 +55,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="WeekColumn.xaml.cs">
+      <DependentUpon>WeekColumn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WeekHoursColumn.xaml.cs">
+      <DependentUpon>WeekHoursColumn.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WeekBody.xaml.cs">
       <DependentUpon>WeekBody.xaml</DependentUpon>
     </Compile>
     <Page Include="CalendarNavbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WeekColumn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WeekHoursColumn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

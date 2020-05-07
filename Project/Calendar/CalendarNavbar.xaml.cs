@@ -53,13 +53,31 @@ namespace Calendar
 
         private void PreviousMonth_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateToDisplay = GetDisplayedDateResourceValue().AddMonths(NumberOfMonthToGoBack);
+            string currentSelectedCalendarViewOption = CurrentCalendarViewOptions.SelectedValue.ToString().Substring(38);
+            DateTime dateToDisplay = DateTime.Now;
+            if (currentSelectedCalendarViewOption == MonthViewOption)
+            {
+                dateToDisplay = GetDisplayedDateResourceValue().AddMonths(NumberOfMonthToGoBack);
+            } 
+            else if(currentSelectedCalendarViewOption == WeekViewOption)
+            {
+                dateToDisplay = GetDisplayedDateResourceValue().AddDays(NumberOfMonthToGoBack * DaysInWeek);
+            }
             SetDisplayedDateAndAssingAllResources(dateToDisplay);
         }
 
         private void NextMonth_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateToDisplay = GetDisplayedDateResourceValue().AddMonths(NumberOfMonthsToAdvance);
+            string currentSelectedCalendarViewOption = CurrentCalendarViewOptions.SelectedValue.ToString().Substring(38);
+            DateTime dateToDisplay = DateTime.Now;
+            if (currentSelectedCalendarViewOption == MonthViewOption)
+            {
+                dateToDisplay = GetDisplayedDateResourceValue().AddMonths(NumberOfMonthsToAdvance);
+            }
+            else if (currentSelectedCalendarViewOption == WeekViewOption)
+            {
+                dateToDisplay = GetDisplayedDateResourceValue().AddDays(DaysInWeek);
+            }
             SetDisplayedDateAndAssingAllResources(dateToDisplay);
         }
 
@@ -88,6 +106,17 @@ namespace Calendar
                     dayNumberResourceValue = candidateDayNumber.ToString();
                 }
                 App.Current.Resources[dayNumberResourceKey] = dayNumberResourceValue;
+            }
+            for (int i = 1; i <= 7; i++)
+            {
+                DateTime now = GetDisplayedDateResourceValue();
+                int dayOfWeek = (int)now.DayOfWeek;
+                if (dayOfWeek == 0)
+                {
+                    dayOfWeek = 7;
+                }
+                now = now.AddDays(-1 * dayOfWeek + i);
+                App.Current.Resources["WeekColumnTitle" + i.ToString()] = getNameOfDayInSpanish(now)+ " "+now.Day.ToString();
             }
         }
 
@@ -154,6 +183,36 @@ namespace Calendar
                     break;
             }
             
+        }
+
+        private string getNameOfDayInSpanish(DateTime date) 
+        {
+            string spanishDayName = "";
+            switch ((int)date.DayOfWeek)
+            {
+                case 1:
+                    spanishDayName = "Lunes";
+                    break;
+                case 2:
+                    spanishDayName = "Martes";
+                    break;
+                case 3:
+                    spanishDayName = "Miércoles";
+                    break;
+                case 4:
+                    spanishDayName = "Jueves";
+                    break;
+                case 5:
+                    spanishDayName = "Viernes";
+                    break;
+                case 6:
+                    spanishDayName = "Sábado";
+                    break;
+                default:
+                    spanishDayName = "Domingo";
+                    break;
+            }
+            return spanishDayName;
         }
     }
 }
