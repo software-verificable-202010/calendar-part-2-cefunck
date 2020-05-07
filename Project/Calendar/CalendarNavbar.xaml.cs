@@ -15,11 +15,14 @@ using System.Windows.Shapes;
 
 namespace Calendar
 {
-    /// <summary>App.Current
-    /// Lógica de interacción para Navbar.xaml
+    /// <summary>
+    /// Lógica de interacción para CalendarNavbar.xaml
     /// </summary>
-    public partial class Navbar : UserControl
+    public partial class CalendarNavbar : UserControl
     {
+        const string MonthViewOption = "Vista Mensual";
+        const string WeekViewOption = "Vista Semanal";
+        const string CurrentBodyContentResourceName = "bodyContent";
         private const string NavBarMonthFormat = "MMMM yyyy";
         private const string DayNumberResourceKeyPrefix = "dayResource";
         private const string DisplayedDateResourceName = "displayedDate";
@@ -33,11 +36,19 @@ namespace Calendar
         private const int NumberOfMonthsToAdvance = 1;
         private const int NumberOfMonthToGoBack = -1;
 
-        public Navbar()
+
+        public CalendarNavbar()
         {
             InitializeComponent();
             SetDisplayedDateResourceValue(DateTime.Now);
             AssignValueToMonthAndYearResource(GetDisplayedDateResourceValue());
+        }
+
+        private void CurrentCalendarViewOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string currentSelectedCalendarViewOption = CurrentCalendarViewOptions.SelectedValue.ToString().Substring(38);
+            SetBodyContentResourceValue(currentSelectedCalendarViewOption);
+
         }
 
         private void PreviousMonth_Click(object sender, RoutedEventArgs e)
@@ -129,6 +140,20 @@ namespace Calendar
         {
             App.Current.Resources[DisplayedDateResourceName] = dateToDisplay;
         }
-
+        private void SetBodyContentResourceValue(string selectedCalendarViewOption)
+        {           
+            switch (selectedCalendarViewOption)
+            {
+                case WeekViewOption:                    
+                    WeekBody weekBody = new WeekBody();
+                    App.Current.Resources[CurrentBodyContentResourceName] = weekBody;
+                    break;
+                default:
+                    MonthBody monthBody = new MonthBody();
+                    App.Current.Resources[CurrentBodyContentResourceName] = monthBody;
+                    break;
+            }
+            
+        }
     }
 }

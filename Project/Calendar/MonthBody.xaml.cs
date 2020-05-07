@@ -16,9 +16,9 @@ using System.Windows.Shapes;
 namespace Calendar
 {
     /// <summary>
-    /// Lógica de interacción para Body.xaml
+    /// Lógica de interacción para MonthBody.xaml
     /// </summary>
-    public partial class Body : UserControl
+    public partial class MonthBody : UserControl
     {
         private Brush highlightColor = Brushes.Red;        
         private const string DayElementNamePrefix = "dayElement";
@@ -34,7 +34,7 @@ namespace Calendar
         private const int SaturdayGridColumnIndex = 5;
         private const int SundayGridColumnIndex = 6;
 
-        public Body()
+        public MonthBody()
         {
             InitializeComponent();
             GenerateDayNumberResources();
@@ -49,7 +49,10 @@ namespace Calendar
             {
                 string dayNumberResourceKey = DayNumberResourceKeyPrefix + i.ToString();
                 string dayNumberResourceValue = DayNumberResourceBlankValue;
-                App.Current.Resources.Add(dayNumberResourceKey, dayNumberResourceValue);
+                if (App.Current.Resources[dayNumberResourceKey] == null) 
+                {
+                    App.Current.Resources.Add(dayNumberResourceKey, dayNumberResourceValue);
+                }                
             }
         }
 

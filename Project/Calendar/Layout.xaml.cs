@@ -20,9 +20,28 @@ namespace Calendar
     /// </summary>
     public partial class Layout : UserControl
     {
+        const string CurrentCalendarViewOptionResourceName = "CurrentCalendarViewOption";
         public Layout()
         {
             InitializeComponent();
+            createAndInsertContentControlToGrid();
+            
+            //this.Resources.Add("bodyContent", bodyContentControl);
+            //string BodyContentResourceName = "bodyContent";
+            //BodyContent.SetResourceReference(ContentControl.ContentProperty, BodyContentResourceName);
+
+
+        }
+
+        public void createAndInsertContentControlToGrid() 
+        {
+            ContentControl bodyContentControl = new ContentControl();
+            bodyContentControl.SetValue(Grid.ColumnProperty, 0);
+            bodyContentControl.SetValue(Grid.RowProperty, 1);
+            bodyContentControl.Name = "BodyContent";
+            string dayNumberResourceKey = "bodyContent";
+            bodyContentControl.SetResourceReference(ContentControl.ContentProperty, dayNumberResourceKey);
+            LayoutGrid.Children.Add(bodyContentControl);       
         }
     }
 }

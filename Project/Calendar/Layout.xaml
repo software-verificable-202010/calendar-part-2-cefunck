@@ -6,16 +6,18 @@
              xmlns:local="clr-namespace:Calendar"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+
+    <Grid x:Name="LayoutGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.25*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <local:Navbar Grid.Column="0" Grid.Row="0"></local:Navbar>
-        <local:Body Grid.Column="0" Grid.Row="1"></local:Body>
+        <local:CalendarNavbar Grid.Column="0" Grid.Row="0"></local:CalendarNavbar>
+        <ContentControl Grid.Column="0" Grid.Row="1" x:Name="BodyContent" Content="{DynamicResource bodyContent}"/>
+        
     </Grid>
 
 </UserControl>
