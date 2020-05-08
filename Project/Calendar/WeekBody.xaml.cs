@@ -20,41 +20,33 @@ namespace Calendar
     /// </summary>
     public partial class WeekBody : UserControl
     {
-        const string WeekColumnNamePrefix = "weekColumn";
-        private const string WeekColumnTitleResourceKeyPrefix = "WeekColumnTiResource";
+        private const int firstColumnIndex = 1;
+        private const int lastColumnIndex = 7;
 
         public WeekBody()
         {
             InitializeComponent();
-            //AssingValuesToWeekColumnTitleResources();
-            createAndInsertDayColumns(); 
+            List<WeekColumn> dayColumnElements = createDayColumnElements();
+            insertDayColumnElementsToWeekBody(dayColumnElements);
             
         }
-        public void createAndInsertDayColumns()
+        public List<WeekColumn> createDayColumnElements()
         {
-            for (int weekColumnIndex = 1; weekColumnIndex <= 7; weekColumnIndex++)
+            List<WeekColumn> dayColumns = new List<WeekColumn>();
+            for (int weekColumnIndex = firstColumnIndex; weekColumnIndex <= lastColumnIndex; weekColumnIndex++)
             {
                 WeekColumn weekColumnElement = new WeekColumn(weekColumnIndex);
-                //weekColumnElement.Name = WeekColumnNamePrefix + weekColumnIndex.ToString();
-                string weekColumnTitleResourceKey = WeekColumnTitleResourceKeyPrefix + weekColumnIndex.ToString();
-                //weekColumnElement.SetResourceReference(WeekColumn.TitleProperty, weekColumnTitleResourceKey);
                 weekColumnElement.SetValue(Grid.ColumnProperty, weekColumnIndex);
-                WeekBodyGrid.Children.Add(weekColumnElement);
+                dayColumns.Add(weekColumnElement);
             }
+            return dayColumns;
         }
-        /*
-
-
-        
-        private void AssingValuesToWeekColumnTitleResources()
+        public void insertDayColumnElementsToWeekBody(List<WeekColumn> dayColumnElements)
         {
-            for (int weekColumnIndex = 1; weekColumnIndex <= 7; weekColumnIndex++)
+            foreach (WeekColumn dayColumnElement in dayColumnElements)
             {
-                string weekColumnTitleResourceKey = WeekColumnTitleResourceKeyPrefix + weekColumnIndex.ToString();
-                string weekColumnTitleResourceValue = "asdasd 2";
-                App.Current.Resources[weekColumnTitleResourceKey] = weekColumnTitleResourceValue;
+                WeekBodyGrid.Children.Add(dayColumnElement);
             }
         }
-         */
     }
 }
