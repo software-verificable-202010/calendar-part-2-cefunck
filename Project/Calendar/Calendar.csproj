@@ -58,6 +58,7 @@
     <Compile Include="AddEditAppointment.xaml.cs">
       <DependentUpon>AddEditAppointment.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities.cs" />
     <Compile Include="WeekColumn.xaml.cs">
       <DependentUpon>WeekColumn.xaml</DependentUpon>
     </Compile>
@@ -135,6 +136,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

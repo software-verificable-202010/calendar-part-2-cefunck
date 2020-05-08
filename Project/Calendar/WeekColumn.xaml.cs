@@ -24,23 +24,7 @@ namespace Calendar
     {
         private const string DisplayedDateResourceName = "displayedDate";
         private const string ColumnTitleResourceKeyPrefix = "WeekColumnTitle";
-        private const string ColumnTitleNamePrefix = "WeekColumnTitleElement";
-        private const string BlankSpace = " ";
-        private const string MondayName = "Lunes";
-        private const string TuesdayName = "Martes";
-        private const string WednesdayName = "Miércoles";
-        private const string ThursdayName = "Jueves";
-        private const string FridayName = "Viernes";
-        private const string SaturdayName = "Sábado";
-        private const string SundayName = "Domingo";
-        private const int MondayNumberInweek = 1;
-        private const int TuesdayNumberInweek = 2;
-        private const int WednesdayNumberInweek = 3;
-        private const int ThursdayNumberInweek = 4;
-        private const int FridayNumberInweek = 5;
-        private const int SaturdayNumberInweek = 6;
-        private const int SundayNumberInweek = 7;
-        private const int negativeMultiplier = -1;
+        private const string ColumnTitleNamePrefix = "WeekColumnTitleElement";        
 
         public int Index 
         {
@@ -54,26 +38,26 @@ namespace Calendar
                 string dayName;
                 switch (Index)
                 {
-                    case MondayNumberInweek:
-                        dayName = MondayName;
+                    case Utilities.MondayNumberInweek:
+                        dayName = Utilities.MondayName;
                         break;
-                    case TuesdayNumberInweek:
-                        dayName = TuesdayName;
+                    case Utilities.TuesdayNumberInweek:
+                        dayName = Utilities.TuesdayName;
                         break;
-                    case WednesdayNumberInweek:
-                        dayName = WednesdayName;
+                    case Utilities.WednesdayNumberInweek:
+                        dayName = Utilities.WednesdayName;
                         break;
-                    case ThursdayNumberInweek:
-                        dayName = ThursdayName;
+                    case Utilities.ThursdayNumberInweek:
+                        dayName = Utilities.ThursdayName;
                         break;
-                    case FridayNumberInweek:
-                        dayName = FridayName;
+                    case Utilities.FridayNumberInweek:
+                        dayName = Utilities.FridayName;
                         break;
-                    case SaturdayNumberInweek:
-                        dayName = SaturdayName;
+                    case Utilities.SaturdayNumberInweek:
+                        dayName = Utilities.SaturdayName;
                         break;
                     default:
-                        dayName = SundayName;
+                        dayName = Utilities.SundayName;
                         break;
                 }
                 return dayName;
@@ -84,8 +68,8 @@ namespace Calendar
             get 
             {
                 DateTime selectedDate = GetDisplayedDateResourceValue();
-                int dayOfWeek = GetDayNumberInWeek(selectedDate);
-                selectedDate = selectedDate.AddDays(negativeMultiplier * dayOfWeek + Index);
+                int dayOfWeek = Utilities.GetDayNumberInWeek(selectedDate);
+                selectedDate = selectedDate.AddDays(Utilities.NegativeMultiplier * dayOfWeek + Index);
                 return selectedDate.Day;
             } 
         }
@@ -100,7 +84,7 @@ namespace Calendar
         { 
             get 
             {
-                return DayName + BlankSpace + DayNumber.ToString(); 
+                return DayName + Utilities.BlankSpace + DayNumber.ToString(); 
             } 
         }
         public WeekColumn(int columnIndex)
@@ -153,26 +137,26 @@ namespace Calendar
         private int GetRowIndex()
         {
             // HACK: Temporary fix until able to Refactor.
-            const int fixedRowNumber = 2;
-            return fixedRowNumber;
+            const int FixedRowNumber = 2;
+            return FixedRowNumber;
         }
         private int GetColumIndex()
         {
             // HACK: Temporary fix until able to Refactor.
-            const int fixedColumnNumber = 0;
-            return fixedColumnNumber;
+            const int FixedColumnNumber = 0;
+            return FixedColumnNumber;
         }
         private int GetRowSpan()
         {
             // HACK: Temporary fix until able to Refactor.
-            const int fixedRowSpan = 20;
-            return fixedRowSpan;
+            const int FixedRowSpan = 20;
+            return FixedRowSpan;
         }
         private int GetColumnSpan()
         {
             // HACK: Temporary fix until able to Refactor.
-            const int fixedColumnSpan = 1;
-            return fixedColumnSpan;
+            const int FixedColumnSpan = 1;
+            return FixedColumnSpan;
         }
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
         {
@@ -183,16 +167,6 @@ namespace Calendar
             AddEditAppointment windowContent = new AddEditAppointment();
             addAppointment.Content = windowContent;
             addAppointment.Show();
-        }
-        private int GetDayNumberInWeek(DateTime date) 
-        {
-            const int SystemEnumSundayDayOfWeek = 0;
-            int dayNumber = (int)date.DayOfWeek;
-            if (dayNumber == SystemEnumSundayDayOfWeek)
-            {
-                dayNumber = SundayNumberInweek;
-            }
-            return dayNumber;
         }
     }
 }

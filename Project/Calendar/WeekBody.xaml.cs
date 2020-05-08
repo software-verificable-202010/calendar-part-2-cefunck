@@ -20,20 +20,20 @@ namespace Calendar
     /// </summary>
     public partial class WeekBody : UserControl
     {
-        private const int firstColumnIndex = 1;
-        private const int lastColumnIndex = 7;
+        private const int FirstColumnIndex = 1;
+        private const int LastColumnIndex = 7;
 
         public WeekBody()
         {
             InitializeComponent();
-            List<WeekColumn> dayColumnElements = createDayColumnElements();
-            insertDayColumnElementsToWeekBody(dayColumnElements);
+            List<WeekColumn> dayColumnElements = CreateDayColumnElements();
+            InsertDayColumnElementsToWeekBody(dayColumnElements);
             
         }
-        public List<WeekColumn> createDayColumnElements()
+        public List<WeekColumn> CreateDayColumnElements()
         {
             List<WeekColumn> dayColumns = new List<WeekColumn>();
-            for (int weekColumnIndex = firstColumnIndex; weekColumnIndex <= lastColumnIndex; weekColumnIndex++)
+            for (int weekColumnIndex = FirstColumnIndex; weekColumnIndex <= LastColumnIndex; weekColumnIndex++)
             {
                 WeekColumn weekColumnElement = new WeekColumn(weekColumnIndex);
                 weekColumnElement.SetValue(Grid.ColumnProperty, weekColumnIndex);
@@ -41,7 +41,7 @@ namespace Calendar
             }
             return dayColumns;
         }
-        public void insertDayColumnElementsToWeekBody(List<WeekColumn> dayColumnElements)
+        public void InsertDayColumnElementsToWeekBody(List<WeekColumn> dayColumnElements)
         {
             foreach (WeekColumn dayColumnElement in dayColumnElements)
             {

@@ -25,7 +25,6 @@ namespace Calendar
         private const string DayNumberResourceKeyPrefix = "dayResource";
         private const string DisplayedDateResourceName = "displayedDate";
         private const string DayNumberResourceBlankValue = "";
-        private const int DaysInWeek = 7;
         private const int IterationIndexOffset = 1;
         private const int GridRowIndexOffset = 1;
         private const int GridColumnIndexOffset = 1;
@@ -112,10 +111,10 @@ namespace Calendar
 
         private bool IsDayNumberInDisplayedMonth(int candidateDayNumber, Point dayElementGridCoordinates)
         {
-            const int firstDayRowIndex = 1;
+            const int FirstDayRowIndex = 1;
             DateTime displayedDate = GetDisplayedDateResourceValue();
-            bool isFirstDayRow = dayElementGridCoordinates.Y == firstDayRowIndex;
-            bool isNotFirstDayRow = dayElementGridCoordinates.Y > firstDayRowIndex;
+            bool isFirstDayRow = dayElementGridCoordinates.Y == FirstDayRowIndex;
+            bool isNotFirstDayRow = dayElementGridCoordinates.Y > FirstDayRowIndex;
             bool isFirstDayColumnOrLater = dayElementGridCoordinates.X >= GetfirstDayGridColumnIndex();
             bool isDisplayableDayElementOfFirstRow = isFirstDayRow && isFirstDayColumnOrLater;
             bool isCandidateDayNumberInDisplayedMonth = candidateDayNumber <= GetNumberOfDaysOfMonth(displayedDate);
@@ -134,7 +133,7 @@ namespace Calendar
         {
             DateTime displayedDate = GetDisplayedDateResourceValue();
             DateTime firstDayOfDisplayedMonth = new DateTime(displayedDate.Year, displayedDate.Month, FirstDayNumberInMonth);
-            int firstDayGridColumnIndex = GetDayNumberInWeek(firstDayOfDisplayedMonth) - GridColumnIndexOffset;
+            int firstDayGridColumnIndex = Utilities.GetDayNumberInWeek(firstDayOfDisplayedMonth) - GridColumnIndexOffset;
             return firstDayGridColumnIndex;
         }
 
@@ -145,21 +144,9 @@ namespace Calendar
 
         private Point GetGridCoordinatesByIterationIndex(int iterationIndex)
         {
-            int gridColumn = (iterationIndex) % DaysInWeek;
-            int gridRow = (iterationIndex / DaysInWeek) + GridRowIndexOffset;
+            int gridColumn = (iterationIndex) % Utilities.DaysInWeek;
+            int gridRow = (iterationIndex / Utilities.DaysInWeek) + GridRowIndexOffset;
             return new Point(gridColumn, gridRow); ;
-        }
-
-        private int GetDayNumberInWeek(DateTime date)
-        {
-            const int SundayDayOfWeek = 7;
-            const int SystemEnumSundayDayOfWeek = 0;
-            int dayNumber = (int)date.DayOfWeek;
-            if (dayNumber == SystemEnumSundayDayOfWeek)
-            {
-                dayNumber = SundayDayOfWeek;
-            }
-            return dayNumber;
         }
     }
 }
