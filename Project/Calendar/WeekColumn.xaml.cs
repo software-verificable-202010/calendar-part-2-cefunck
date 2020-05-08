@@ -25,7 +25,7 @@ namespace Calendar
         private const string DisplayedDateResourceName = "displayedDate";
         private const string ColumnTitleResourceKeyPrefix = "WeekColumnTitle";
         private const string ColumnTitleNamePrefix = "WeekColumnTitleElement";
-        private const string Blank = " ";
+        private const string BlankSpace = " ";
         private const string MondayName = "Lunes";
         private const string TuesdayName = "Martes";
         private const string WednesdayName = "Miércoles";
@@ -41,8 +41,6 @@ namespace Calendar
         private const int SaturdayNumberInweek = 6;
         private const int SundayNumberInweek = 7;
         private const int negativeMultiplier = -1;
-        const int oldSundayNumber = 0;
-        const int newSundayNumber = 7;
 
         public int Index 
         {
@@ -53,7 +51,7 @@ namespace Calendar
         { 
             get 
             {
-                string dayName = Blank;
+                string dayName;
                 switch (Index)
                 {
                     case MondayNumberInweek:
@@ -102,7 +100,7 @@ namespace Calendar
         { 
             get 
             {
-                return DayName + Blank + DayNumber.ToString(); 
+                return DayName + BlankSpace + DayNumber.ToString(); 
             } 
         }
         public WeekColumn(int columnIndex)
@@ -188,12 +186,11 @@ namespace Calendar
         }
         private int GetDayNumberInWeek(DateTime date) 
         {
-            const int SundayDayOfWeek = 7;
             const int SystemEnumSundayDayOfWeek = 0;
             int dayNumber = (int)date.DayOfWeek;
             if (dayNumber == SystemEnumSundayDayOfWeek)
             {
-                dayNumber = SundayDayOfWeek;
+                dayNumber = SundayNumberInweek;
             }
             return dayNumber;
         }

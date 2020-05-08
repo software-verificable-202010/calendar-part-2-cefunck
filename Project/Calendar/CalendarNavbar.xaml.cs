@@ -25,7 +25,24 @@ namespace Calendar
         const string CurrentBodyContentResourceName = "bodyContent";
         private const string NavBarMonthFormat = "MMMM yyyy";
         private const string DayNumberResourceKeyPrefix = "dayResource";
+        private const string ColumnTitleResourceKeyPrefix = "WeekColumnTitle";
+        private const string MonthAndYearResourceName = "monthAndYear";
         private const string DisplayedDateResourceName = "displayedDate";
+        private const string MondayName = "Lunes";
+        private const string TuesdayName = "Martes";
+        private const string WednesdayName = "Miércoles";
+        private const string ThursdayName = "Jueves";
+        private const string FridayName = "Viernes";
+        private const string SaturdayName = "Sábado";
+        private const string SundayName = "Domingo";
+        private const int MondayNumberInweek = 1;
+        private const int TuesdayNumberInweek = 2;
+        private const int WednesdayNumberInweek = 3;
+        private const int ThursdayNumberInweek = 4;
+        private const int FridayNumberInweek = 5;
+        private const int SaturdayNumberInweek = 6;
+        private const int SundayNumberInweek = 7;
+        private const string BlankSpace = " ";
         private const string DayNumberResourceBlankValue = "";
         private const int IterationIndexOffset = 1;
         private const int GridRowIndexOffset = 1;
@@ -35,6 +52,7 @@ namespace Calendar
         private const int NumberOfCellsInGrid = 42;
         private const int NumberOfMonthsToAdvance = 1;
         private const int NumberOfMonthToGoBack = -1;
+        private const int negativeMultiplier = -1;
 
 
         public CalendarNavbar()
@@ -46,54 +64,54 @@ namespace Calendar
 
         private void CurrentCalendarViewOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string currentSelectedCalendarViewOption = CurrentCalendarViewOptions.SelectedValue.ToString().Substring(38);
-            SetBodyContentResourceValue(currentSelectedCalendarViewOption);
-
+            string selectedCalendarViewOption = GetSelectedCalendarView();
+            SetBodyContentResourceValue(selectedCalendarViewOption);
         }
 
         private void PreviousMonth_Click(object sender, RoutedEventArgs e)
         {
-            string currentSelectedCalendarViewOption = CurrentCalendarViewOptions.SelectedValue.ToString().Substring(38);
-            DateTime dateToDisplay = DateTime.Now;
+            string currentSelectedCalendarViewOption = GetSelectedCalendarView();
+            DateTime dateToDisplay = GetDisplayedDateResourceValue();
             if (currentSelectedCalendarViewOption == MonthViewOption)
             {
-                dateToDisplay = GetDisplayedDateResourceValue().AddMonths(NumberOfMonthToGoBack);
+                dateToDisplay = dateToDisplay.AddMonths(NumberOfMonthToGoBack);
             } 
             else if(currentSelectedCalendarViewOption == WeekViewOption)
             {
-                dateToDisplay = GetDisplayedDateResourceValue().AddDays(NumberOfMonthToGoBack * DaysInWeek);
+                dateToDisplay = dateToDisplay.AddDays(NumberOfMonthToGoBack * DaysInWeek);
             }
             SetDisplayedDateAndAssingAllResources(dateToDisplay);
         }
 
         private void NextMonth_Click(object sender, RoutedEventArgs e)
         {
-            string currentSelectedCalendarViewOption = CurrentCalendarViewOptions.SelectedValue.ToString().Substring(38);
-            DateTime dateToDisplay = DateTime.Now;
+            string currentSelectedCalendarViewOption = GetSelectedCalendarView();
+            DateTime dateToDisplay = GetDisplayedDateResourceValue();
             if (currentSelectedCalendarViewOption == MonthViewOption)
             {
-                dateToDisplay = GetDisplayedDateResourceValue().AddMonths(NumberOfMonthsToAdvance);
+                dateToDisplay = dateToDisplay.AddMonths(NumberOfMonthsToAdvance);
             }
             else if (currentSelectedCalendarViewOption == WeekViewOption)
             {
-                dateToDisplay = GetDisplayedDateResourceValue().AddDays(DaysInWeek);
+                dateToDisplay = dateToDisplay.AddDays(DaysInWeek);
             }
             SetDisplayedDateAndAssingAllResources(dateToDisplay);
         }
 
-        private void SetDisplayedDateAndAssingAllResources(DateTime dateToDisplay)
+        private void SetDisplayedDateAndAssingAllResources(DateTime date)
         {
-            SetDisplayedDateResourceValue(dateToDisplay);
+            SetDisplayedDateResourceValue(date);
             AssignValueToMonthAndYearResource(GetDisplayedDateResourceValue());
-            AssingValuesToDayNumberResources(GetDisplayedDateResourceValue());
+            AssingValuesToDayNumberResources();
+            AssingValuesToDayColumnTitleResources();
         }
 
         private void AssignValueToMonthAndYearResource(DateTime date)
         {
-            App.Current.Resources["monthAndYear"] = date.ToString(NavBarMonthFormat);
+            App.Current.Resources[MonthAndYearResourceName] = date.ToString(NavBarMonthFormat);
         }
 
-        private void AssingValuesToDayNumberResources(DateTime displayedDate)
+        private void AssingValuesToDayNumberResources()
         {
             for (int i = 0; i < NumberOfCellsInGrid; i++)
             {
@@ -107,24 +125,27 @@ namespace Calendar
                 }
                 App.Current.Resources[dayNumberResourceKey] = dayNumberResourceValue;
             }
-            for (int i = 1; i <= 7; i++)
+        }
+
+        private void AssingValuesToDayColumnTitleResources()
+        {
+            for (int i = 1; i <= DaysInWeek; i++)
             {
-                DateTime now = GetDisplayedDateResourceValue();
-                int dayOfWeek = (int)now.DayOfWeek;
-                if (dayOfWeek == 0)
-                {
-                    dayOfWeek = 7;
-                }
-                now = now.AddDays(-1 * dayOfWeek + i);
-                App.Current.Resources["WeekColumnTitle" + i.ToString()] = getNameOfDayInSpanish(now)+ " "+now.Day.ToString();
+                DateTime displayedDate = GetDisplayedDateResourceValue();
+                int dayOfWeek = GetDayNumberInWeek(displayedDate);
+                displayedDate = displayedDate.AddDays(negativeMultiplier * dayOfWeek + i);
+                string columnTitleResourceKey = ColumnTitleResourceKeyPrefix + i.ToString();
+                string columnTitleResourceValue = getNameOfDayInSpanish(displayedDate) + BlankSpace + displayedDate.Day.ToString();
+                App.Current.Resources[columnTitleResourceKey] = columnTitleResourceValue;
             }
         }
 
         private bool IsDayNumberInDisplayedMonth(int candidateDayNumber, Point dayElementGridCoordinates)
         {
+            const int firstDayRowIndex = 1;
             DateTime displayedDate = GetDisplayedDateResourceValue();
-            bool isFirstDayRow = dayElementGridCoordinates.Y == 1;
-            bool isNotFirstDayRow = dayElementGridCoordinates.Y > 1;
+            bool isFirstDayRow = dayElementGridCoordinates.Y == firstDayRowIndex;
+            bool isNotFirstDayRow = dayElementGridCoordinates.Y > firstDayRowIndex;
             bool isFirstDayColumnOrLater = dayElementGridCoordinates.X >= GetfirstDayGridColumnIndex();
             bool isDisplayableDayElementOfFirstRow = isFirstDayRow && isFirstDayColumnOrLater;
             bool isCandidateDayNumberInDisplayedMonth = candidateDayNumber <= GetNumberOfDaysOfMonth(displayedDate);
@@ -141,15 +162,9 @@ namespace Calendar
 
         private int GetfirstDayGridColumnIndex()
         {
-            const int SundayDayOfWeek = 7;
-            const int SystemEnumSundayDayOfWeek = 0;
             DateTime displayedDate = GetDisplayedDateResourceValue();
             DateTime firstDayOfDisplayedMonth = new DateTime(displayedDate.Year, displayedDate.Month, FirstDayNumberInMonth);
-            int firstDayGridColumnIndex = (int)(firstDayOfDisplayedMonth.DayOfWeek) - GridColumnIndexOffset;
-            if ((int)(firstDayOfDisplayedMonth.DayOfWeek) == SystemEnumSundayDayOfWeek)
-            {
-                firstDayGridColumnIndex = SundayDayOfWeek - GridColumnIndexOffset;
-            }
+            int firstDayGridColumnIndex = GetDayNumberInWeek(firstDayOfDisplayedMonth) - GridColumnIndexOffset;
             return firstDayGridColumnIndex;
         }
 
@@ -157,7 +172,7 @@ namespace Calendar
         {
             int gridColumn = (iterationIndex) % DaysInWeek;
             int gridRow = (iterationIndex / DaysInWeek) + GridRowIndexOffset;
-            return new Point(gridColumn, gridRow); ;
+            return new Point(gridColumn, gridRow);
         }
 
         private DateTime GetDisplayedDateResourceValue()
@@ -169,6 +184,7 @@ namespace Calendar
         {
             App.Current.Resources[DisplayedDateResourceName] = dateToDisplay;
         }
+
         private void SetBodyContentResourceValue(string selectedCalendarViewOption)
         {           
             switch (selectedCalendarViewOption)
@@ -187,32 +203,50 @@ namespace Calendar
 
         private string getNameOfDayInSpanish(DateTime date) 
         {
-            string spanishDayName = "";
+            string spanishDayName;
             switch ((int)date.DayOfWeek)
             {
-                case 1:
-                    spanishDayName = "Lunes";
+                case MondayNumberInweek:
+                    spanishDayName = MondayName;
                     break;
-                case 2:
-                    spanishDayName = "Martes";
+                case TuesdayNumberInweek:
+                    spanishDayName = TuesdayName;
                     break;
-                case 3:
-                    spanishDayName = "Miércoles";
+                case WednesdayNumberInweek:
+                    spanishDayName = WednesdayName;
                     break;
-                case 4:
-                    spanishDayName = "Jueves";
+                case ThursdayNumberInweek:
+                    spanishDayName = ThursdayName;
                     break;
-                case 5:
-                    spanishDayName = "Viernes";
+                case FridayNumberInweek:
+                    spanishDayName = FridayName;
                     break;
-                case 6:
-                    spanishDayName = "Sábado";
+                case SaturdayNumberInweek:
+                    spanishDayName = SaturdayName;
                     break;
                 default:
-                    spanishDayName = "Domingo";
+                    spanishDayName = SundayName;
                     break;
             }
             return spanishDayName;
+        }
+
+        private string GetSelectedCalendarView() 
+        {            
+            const int initOfValueSubstring = 38;
+            return CurrentCalendarViewOptions.SelectedValue.ToString().Substring(initOfValueSubstring);
+        }
+
+        private int GetDayNumberInWeek(DateTime date)
+        {
+            const int SystemEnumSundayDayOfWeek = 0;
+
+            int dayNumber = (int)date.DayOfWeek;
+            if (dayNumber == SystemEnumSundayDayOfWeek)
+            {
+                dayNumber = SundayNumberInweek;
+            }
+            return dayNumber;
         }
     }
 }
