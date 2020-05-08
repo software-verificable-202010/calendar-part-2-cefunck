@@ -20,28 +20,29 @@ namespace Calendar
     /// </summary>
     public partial class CalendarLayout : UserControl
     {
-        const string CurrentCalendarViewOptionResourceName = "CurrentCalendarViewOption";
+        const int bodyGridRow = 1;
+        const int bodyGridColumn = 0;
+        const string dayNumberResourceKey = "bodyContentResourceKey";
+
         public CalendarLayout()
         {
             InitializeComponent();
-            createAndInsertContentControlToGrid();
-            
-            //this.Resources.Add("bodyContent", bodyContentControl);
-            //string BodyContentResourceName = "bodyContent";
-            //BodyContent.SetResourceReference(ContentControl.ContentProperty, BodyContentResourceName);
-
-
+            ContentControl calendarBody = createBodyContentControl();
+            InsertBodyContentControlToGrid(calendarBody);
         }
 
-        public void createAndInsertContentControlToGrid() 
+        public ContentControl createBodyContentControl()
         {
+
             ContentControl bodyContentControl = new ContentControl();
-            bodyContentControl.SetValue(Grid.ColumnProperty, 0);
-            bodyContentControl.SetValue(Grid.RowProperty, 1);
-            bodyContentControl.Name = "BodyContent";
-            string dayNumberResourceKey = "bodyContent";
+            bodyContentControl.SetValue(Grid.ColumnProperty, bodyGridColumn);
+            bodyContentControl.SetValue(Grid.RowProperty, bodyGridRow);
             bodyContentControl.SetResourceReference(ContentControl.ContentProperty, dayNumberResourceKey);
-            LayoutGrid.Children.Add(bodyContentControl);       
+            return bodyContentControl;
+        }
+        public void InsertBodyContentControlToGrid(ContentControl calendarBody)
+        {
+            LayoutGrid.Children.Add(calendarBody);
         }
     }
 }
