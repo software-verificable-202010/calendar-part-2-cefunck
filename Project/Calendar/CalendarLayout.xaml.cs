@@ -16,12 +16,12 @@ using System.Windows.Shapes;
 namespace Calendar
 {
     /// <summary>
-    /// Lógica de interacción para Layout.xaml
+    /// Lógica de interacción para CalendarLayout.xaml
     /// </summary>
-    public partial class Layout : UserControl
+    public partial class CalendarLayout : UserControl
     {
         const string CurrentCalendarViewOptionResourceName = "CurrentCalendarViewOption";
-        public Layout()
+        public CalendarLayout()
         {
             InitializeComponent();
             createAndInsertContentControlToGrid();

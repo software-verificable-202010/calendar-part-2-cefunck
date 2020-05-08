@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddEditAppointment.xaml.cs">
+      <DependentUpon>AddEditAppointment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WeekColumn.xaml.cs">
       <DependentUpon>WeekColumn.xaml</DependentUpon>
     </Compile>
@@ -64,6 +67,10 @@
     <Compile Include="WeekBody.xaml.cs">
       <DependentUpon>WeekBody.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddEditAppointment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CalendarNavbar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,7 +87,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Layout.xaml">
+    <Page Include="CalendarLayout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -99,8 +106,8 @@
     <Compile Include="MonthBody.xaml.cs">
       <DependentUpon>MonthBody.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Layout.xaml.cs">
-      <DependentUpon>Layout.xaml</DependentUpon>
+    <Compile Include="CalendarLayout.xaml.cs">
+      <DependentUpon>CalendarLayout.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
