@@ -23,6 +23,8 @@ namespace Calendar
     public partial class WeekColumn : UserControl
     {
         private const string DisplayedDateResourceName = "displayedDate";
+        private const string ColumnTitleResourceKeyPrefix = "WeekColumnTitle";
+        private const string ColumnTitleNamePrefix = "WeekColumnTitleElement";
         private const string Blank = " ";
         private const string MondayName = "Lunes";
         private const string TuesdayName = "Martes";
@@ -39,7 +41,9 @@ namespace Calendar
         private const int SaturdayNumberInweek = 6;
         private const int SundayNumberInweek = 7;
         private const int negativeMultiplier = -1;
-        private const string ColumnTitleResourceKeyPrefix = "WeekColumnTitle";
+        const int oldSundayNumber = 0;
+        const int newSundayNumber = 7;
+
         public int Index 
         {
             get;
@@ -106,8 +110,9 @@ namespace Calendar
             InitializeComponent();
             Index = columnIndex;
             GenerateTitleResource();
-            AssingValuesToTitleResource(GetDisplayedDateResourceValue());
-            CreateAndInsertTitleElementToColumn();
+            AssingValuesToTitleResource();
+            TextBlock title = CreateTitleElement();
+            InsertTitleElementToColumn(title);
         }
         private void GenerateTitleResource()
         {
@@ -116,64 +121,30 @@ namespace Calendar
                 App.Current.Resources.Add(TitleResourceKey, TitleResourceValue);
             }
         }
-        private void AssingValuesToTitleResource(DateTime displayedDate)
+        private void AssingValuesToTitleResource()
         {
             App.Current.Resources[TitleResourceKey] = TitleResourceValue;
         }
-
-        private void AssingValuesToAppointmensResource() 
-        {
-            List<Appointment> appointResourceValue = new List<Appointment>();
-            appointResourceValue.Add(new Appointment("Título", "Descripción", new DateTime(2020,5,7,19,00,00), new DateTime(2020, 5, 7, 19, 30, 00)));
-            App.Current.Resources["AppointmentsResource"] = appointResourceValue;
-        }
-        private void CreateAndInsertAppointmentElements()
-        {
-            foreach (Appointment appointment in (List<Appointment>)App.Current.Resources["AppointmentsResource"])
-            {
-                if (appointment.End.Day == getDateOfColumn().Day)
-                {
-                    int row = GetRowIndex(appointment.Start);
-                    int column = GetColumIndex();
-                    int rowSpan = GetRowSpan(appointment.Start, appointment.End);
-                    int columnSpan = GetColumnSpan();
-                    Border appointmentBorder = new Border();
-                    //appointmentBorder.Name = "AppointmentBorder"();
-                    appointmentBorder.SetValue(Grid.ColumnProperty, column);
-                    appointmentBorder.SetValue(Grid.RowProperty, row);
-                    appointmentBorder.SetValue(Grid.ColumnSpanProperty, columnSpan);
-                    appointmentBorder.SetValue(Grid.RowSpanProperty, rowSpan);
-                    WeekColumnGrid.Children.Add(appointmentBorder);
-
-                    TextBlock appointmentText = new TextBlock();
-                    //appointmentText.Name = "AppointmentTitle" + Index.ToString();
-                    //appointmentText.SetResourceReference(TextBlock.TextProperty, appointment.Title);
-                    appointmentText.SetValue(TextBlock.TextProperty, appointment.Title);
-                    appointmentText.SetValue(Grid.ColumnProperty, column);
-                    appointmentText.SetValue(Grid.RowProperty, row);
-                    appointmentText.SetValue(Grid.ColumnSpanProperty, columnSpan);
-                    appointmentText.SetValue(Grid.RowSpanProperty, rowSpan);
-                    WeekColumnGrid.Children.Add(appointmentText);
-                }
-            }
-        }
-
-        private void CreateAndInsertTitleElementToColumn()
+        private TextBlock CreateTitleElement()
         {
             TextBlock titleElement = new TextBlock();
-            titleElement.Name = "Title"+Index.ToString();
+            titleElement.Name = ColumnTitleNamePrefix + Index.ToString();
             titleElement.SetResourceReference(TextBlock.TextProperty, TitleResourceKey);
-            titleElement.SetValue(Grid.ColumnProperty,0);
-            titleElement.SetValue(Grid.RowProperty,0);
-            titleElement.SetValue(Grid.ColumnSpanProperty,2);
-            titleElement.SetValue(Grid.RowSpanProperty,2);
+            titleElement.SetValue(Grid.ColumnProperty, 0);
+            titleElement.SetValue(Grid.RowProperty, 0);
+            titleElement.SetValue(Grid.ColumnSpanProperty, 2);
+            titleElement.SetValue(Grid.RowSpanProperty, 2);
+            return titleElement;
+        }
+        private void InsertTitleElementToColumn(TextBlock titleElement)
+        {
             WeekColumnGrid.Children.Add(titleElement);
         }
         private DateTime GetDisplayedDateResourceValue()
         {
             return (DateTime)App.Current.Resources[DisplayedDateResourceName];
         }
-        private DateTime getDateOfColumn() 
+        private DateTime GetDateOfColumn() 
         {
             DateTime displayedDate = GetDisplayedDateResourceValue();
             int year = displayedDate.Year;
@@ -181,43 +152,42 @@ namespace Calendar
             int day = (int)DayNumber;
             return new DateTime(year,month,day);
         }
-        private int GetRowIndex(DateTime start)
+        private int GetRowIndex()
         {
-            int row = 2;
-            return row;
+            // HACK: Temporary fix until able to Refactor.
+            const int fixedRowNumber = 2;
+            return fixedRowNumber;
         }
         private int GetColumIndex()
         {
-            int column = 0;
-            return column;
+            // HACK: Temporary fix until able to Refactor.
+            const int fixedColumnNumber = 0;
+            return fixedColumnNumber;
         }
-        private int GetRowSpan(DateTime start, DateTime end)
+        private int GetRowSpan()
         {
-            int rowSpan = 20;
-            return rowSpan;
+            // HACK: Temporary fix until able to Refactor.
+            const int fixedRowSpan = 20;
+            return fixedRowSpan;
         }
         private int GetColumnSpan()
         {
-            int columnSpan = 1;
-            return columnSpan;
+            // HACK: Temporary fix until able to Refactor.
+            const int fixedColumnSpan = 1;
+            return fixedColumnSpan;
         }
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
         {
-            int row = 100;
-            Button b = (Button)sender;
-            row = (int)b.GetValue(Grid.RowProperty);
-            MessageBox.Show("row is: "+row);
+            // TODO: to complete
+            Button pressedCellOfWeekColumn = (Button)sender;
+            int pressedCellRow = (int)pressedCellOfWeekColumn.GetValue(Grid.RowProperty);
             Window addAppointment = new Window();
             AddEditAppointment windowContent = new AddEditAppointment();
             addAppointment.Content = windowContent;
-            addAppointment.Height = 400;
-            addAppointment.Width = 800;
             addAppointment.Show();
         }
         private int GetDayNumberInWeek(DateTime date) 
         {
-            const int oldSundayNumber = 0;
-            const int newSundayNumber = 7;
             int dayNumber = (int)date.DayOfWeek;
             if (dayNumber == oldSundayNumber)
             {
