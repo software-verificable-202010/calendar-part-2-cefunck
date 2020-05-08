@@ -188,10 +188,12 @@ namespace Calendar
         }
         private int GetDayNumberInWeek(DateTime date) 
         {
+            const int SundayDayOfWeek = 7;
+            const int SystemEnumSundayDayOfWeek = 0;
             int dayNumber = (int)date.DayOfWeek;
-            if (dayNumber == oldSundayNumber)
+            if (dayNumber == SystemEnumSundayDayOfWeek)
             {
-                dayNumber = newSundayNumber;
+                dayNumber = SundayDayOfWeek;
             }
             return dayNumber;
         }

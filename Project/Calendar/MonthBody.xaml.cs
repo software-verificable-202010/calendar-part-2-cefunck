@@ -39,7 +39,8 @@ namespace Calendar
             InitializeComponent();
             GenerateDayNumberResources();
             AssingValuesToDayNumberResources(GetDisplayedDateResourceValue());
-            CreateAndInsertDayElementsToGrid();
+            List<TextBlock> dayElements = CreateDayElements();
+            InsertDayElementsToGrid(dayElements);
             HighLightWeekends();
         }
        
@@ -72,8 +73,9 @@ namespace Calendar
             }
         }
 
-        private void CreateAndInsertDayElementsToGrid()
+        private List<TextBlock> CreateDayElements()
         {
+            List<TextBlock> dayElements = new List<TextBlock>();
             for (int i = 0; i < NumberOfCellsInGrid; i++)
             {
                 TextBlock dayElement = new TextBlock();                
@@ -83,6 +85,15 @@ namespace Calendar
                 Point dayElementGridCoordinates = GetGridCoordinatesByIterationIndex(i);
                 dayElement.SetValue(Grid.ColumnProperty, (int)dayElementGridCoordinates.X);
                 dayElement.SetValue(Grid.RowProperty, (int)dayElementGridCoordinates.Y);
+                dayElements.Add(dayElement);
+            }
+            return dayElements;
+        }
+
+        private void InsertDayElementsToGrid(List<TextBlock> dayElements)
+        {
+            foreach (TextBlock dayElement in dayElements)
+            {
                 BodyGrid.Children.Add(dayElement);
             }
         }
@@ -101,9 +112,10 @@ namespace Calendar
 
         private bool IsDayNumberInDisplayedMonth(int candidateDayNumber, Point dayElementGridCoordinates)
         {
+            const int firstDayRowIndex = 1;
             DateTime displayedDate = GetDisplayedDateResourceValue();
-            bool isFirstDayRow = dayElementGridCoordinates.Y == 1;
-            bool isNotFirstDayRow = dayElementGridCoordinates.Y > 1;
+            bool isFirstDayRow = dayElementGridCoordinates.Y == firstDayRowIndex;
+            bool isNotFirstDayRow = dayElementGridCoordinates.Y > firstDayRowIndex;
             bool isFirstDayColumnOrLater = dayElementGridCoordinates.X >= GetfirstDayGridColumnIndex();
             bool isDisplayableDayElementOfFirstRow = isFirstDayRow && isFirstDayColumnOrLater;
             bool isCandidateDayNumberInDisplayedMonth = candidateDayNumber <= GetNumberOfDaysOfMonth(displayedDate);
@@ -120,15 +132,9 @@ namespace Calendar
 
         private int GetfirstDayGridColumnIndex()
         {
-            const int SundayDayOfWeek = 7;
-            const int SystemEnumSundayDayOfWeek = 0;
             DateTime displayedDate = GetDisplayedDateResourceValue();
             DateTime firstDayOfDisplayedMonth = new DateTime(displayedDate.Year, displayedDate.Month, FirstDayNumberInMonth);
-            int firstDayGridColumnIndex = (int)(firstDayOfDisplayedMonth.DayOfWeek) - GridColumnIndexOffset;
-            if ((int)(firstDayOfDisplayedMonth.DayOfWeek) == SystemEnumSundayDayOfWeek)
-            {
-                firstDayGridColumnIndex = SundayDayOfWeek - GridColumnIndexOffset;
-            }
+            int firstDayGridColumnIndex = GetDayNumberInWeek(firstDayOfDisplayedMonth) - GridColumnIndexOffset;
             return firstDayGridColumnIndex;
         }
 
@@ -142,6 +148,18 @@ namespace Calendar
             int gridColumn = (iterationIndex) % DaysInWeek;
             int gridRow = (iterationIndex / DaysInWeek) + GridRowIndexOffset;
             return new Point(gridColumn, gridRow); ;
+        }
+
+        private int GetDayNumberInWeek(DateTime date)
+        {
+            const int SundayDayOfWeek = 7;
+            const int SystemEnumSundayDayOfWeek = 0;
+            int dayNumber = (int)date.DayOfWeek;
+            if (dayNumber == SystemEnumSundayDayOfWeek)
+            {
+                dayNumber = SundayDayOfWeek;
+            }
+            return dayNumber;
         }
     }
 }
